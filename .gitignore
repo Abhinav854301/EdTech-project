@@ -1,0 +1,12 @@
+# Backend dependencies
+backend/node_modules
+
+# Frontend dependencies (in root)
+/node_modules
+
+# Environment variables
+backend/.env
+
+# Optional: Ignore OS-specific files
+.DS_Store
+Thumbs.db

@@ -22,9 +22,6 @@
 </head>
 <body>
 	
-    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-<script src="https://files.bpcontent.cloud/2024/12/21/19/20241221191354-8QGA6UJK.js"></script>
-    
 <!-- Navigation Bar -->
 	<header id="header">
 		<nav>
@@ -37,7 +34,15 @@
 				<li><a href="#contactus_section">Contact</a></li>
 			</ul>
 			<div class="srch"><input type="text" class="search" placeholder="Search here..."><img src="images/icon/search.png" alt="search" onclick=slide()></div>
-			<a class="get-started" href="login.html">Log in / Sign up</a>
+			
+            <!-- Login/Signup Link (Give it an ID) -->
+            <a id="login-signup-link" class="get-started" href="login.html">Log in / Sign up</a>
+
+            <!-- User Info & Logout Button Container (Initially Hidden) -->
+            <div id="user-info-container" style="display: none; align-items: center;">
+                <span id="user-name" style="color: white; margin-right: 15px;"></span> 
+                <button id="logout-button" class="get-started" style="background-color: #FA4B37; border: none; cursor: pointer;">Logout</button>
+            </div>
 			
 			<img src="images/icon/menu.png" class="menu" onclick="sideMenu(0)" alt="menu">
 		</nav>
@@ -183,7 +188,7 @@
 	<div class="rev-container">
 		<div class="rev-card">
 			<div class="identity">
-				<img src="images/creator/humanNotExist1.jpg"><p>Sophie Daniel</p>
+				<img src="images/creator/abhinav.jpg"><p>Sophie Daniel</p> <!-- Changed image -->
 				<h6>Java</h6>
 				<div class="rating"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"></div>
 			</div>
@@ -196,7 +201,7 @@
 		</div>
 		<div class="rev-card">
 			<div class="identity">
-				<img src="images/creator/humanNotExist2.jpg"><p>Clayton Clair</p>
+				<img src="images/creator/shiva.jpg"><p>Clayton Clair</p> <!-- Changed image -->
 				<h6>C/C++</h6>
 				<div class="rating"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"></div>
 			</div>
@@ -209,7 +214,7 @@
 		</div>
 		<div class="rev-card">
 			<div class="identity">
-				<img src="images/creator/humanNotExist3.jpg"><p>Devyn Sethi</p>
+				<img src="images/creator/abhinav.jpg"><p>Devyn Sethi</p> <!-- Changed image -->
 				<h6>JEE</h6>
 				<div class="rating"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"></div>
 			</div>
@@ -222,7 +227,7 @@
 		</div>
 		<div class="rev-card">
 			<div class="identity">
-				<img src="images/creator/humanNotExist4.jpg"><p>Rylee Phillips</p>
+				<img src="images/creator/shiva.jpg"><p>Rylee Phillips</p> <!-- Changed image -->
 				<h6>Python</h6>
 				<div class="rating"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"><img src="images/icon/star.png"></div>
 			</div>
@@ -314,8 +319,113 @@
 		</div>
 	</footer>
 	
+    <!-- Your existing script block for login state and smooth scroll -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            const loginSignupLink = document.getElementById('login-signup-link');
+            const userInfoContainer = document.getElementById('user-info-container');
+            const userNameSpan = document.getElementById('user-name');
+            const logoutButton = document.getElementById('logout-button');
+            const backendUrl = 'http://localhost:5000'; // Make sure this matches your backend
 
-  
+            // --- Login State Check --- 
+            if (token) {
+                // User might be logged in, try to verify and get user info
+                try {
+                    const response = await fetch(`${backendUrl}/api/users/me`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+
+                    if (response.ok) {
+                        const user = await response.json();
+                        if (loginSignupLink) loginSignupLink.style.display = 'none';
+                        if (userInfoContainer) userInfoContainer.style.display = 'flex';
+                        if (userNameSpan) userNameSpan.textContent = `Welcome, ${user.name}!`;
+                        if (logoutButton) {
+                            logoutButton.addEventListener('click', () => {
+                                localStorage.removeItem('token');
+                                window.location.reload();
+                            });
+                        }
+                    } else {
+                        localStorage.removeItem('token');
+                        if (loginSignupLink) loginSignupLink.style.display = 'block';
+                        if (userInfoContainer) userInfoContainer.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    localStorage.removeItem('token');
+                    if (loginSignupLink) loginSignupLink.style.display = 'block';
+                    if (userInfoContainer) userInfoContainer.style.display = 'none';
+                }
+            } else {
+                if (loginSignupLink) loginSignupLink.style.display = 'block';
+                if (userInfoContainer) userInfoContainer.style.display = 'none';
+            }
+
+            // --- Smooth Scrolling --- 
+            const navLinks = document.querySelectorAll('nav ul li a');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    // Check if the link is an internal anchor link
+                    if (this.hash !== "") {
+                        // Prevent default anchor click behavior
+                        event.preventDefault();
+
+                        // Store hash
+                        const hash = this.hash;
+
+                        // Find the target element
+                        const targetElement = document.querySelector(hash);
+
+                        // Scroll smoothly to the target element
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // --- Active Link Highlighting on Scroll --- 
+            const sections = document.querySelectorAll('header[id], div.diffSection[id]'); // Select header and sections with IDs
+            const mainNavLinks = document.querySelectorAll('nav ul li a'); // Select only main nav links
+
+            function changeActiveLink() {
+                let index = sections.length;
+
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                mainNavLinks.forEach((link) => link.classList.remove('active'));
+                
+                // Find the corresponding link and add 'active' class
+                // Ensure the link exists before trying to add the class
+                const activeLink = document.querySelector(`nav ul li a[href*=\"${sections[index].id}\"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                } else if (index === 0) { // Special case for Home/Header
+                     const homeLink = document.querySelector('nav ul li a[href=""]'); // Assuming Home link has empty href
+                     if (homeLink) homeLink.classList.add('active');
+                }
+            }
+
+            // Initial check in case the page loads scrolled
+            changeActiveLink(); 
+            // Add listener for scroll events
+            window.addEventListener('scroll', changeActiveLink);
+
+        });
+    </script>
+
+    <!-- Botpress scripts (keep them here at the end) -->
+    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2024/12/21/19/20241221191354-8QGA6UJK.js"></script>
 
 </body>
 </html>

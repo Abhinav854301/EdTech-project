@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Sign Up - GUIDE IN</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your existing stylesheet -->
+    <style>
+        /* Add some basic styling for the login form */
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f4; /* Or use a background image */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 350px; /* Adjust width as needed */
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .login-container label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="email"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Include padding in width */
+        }
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #DF2771; /* Example color from your theme */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .login-container button:hover {
+            opacity: 0.9;
+        }
+        .toggle-form {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .toggle-form a {
+            color: #FA4B37; /* Example color from your theme */
+            text-decoration: none;
+        }
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+        /* Hide signup form initially */
+        #signup-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Login Form -->
+        <form id="login-form" action="#" method="post"> 
+            <h2>Login</h2>
+            <label for="login-email">Email:</label>
+            <input type="email" id="login-email" name="email" required>
+
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" name="password" required>
+
+            <button type="submit">Login</button>
+            <p class="toggle-form">Don't have an account? <a href="#" onclick="toggleForms()">Sign Up</a></p>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="signup-form" action="#" method="post"> <!-- Add your backend endpoint later -->
+            <h2>Sign Up</h2>
+            <label for="signup-name">Full Name:</label>
+            <input type="text" id="signup-name" name="fullname" required>
+
+            <label for="signup-email">Email:</label>
+            <input type="email" id="signup-email" name="email" required>
+
+            <label for="signup-password">Password:</label>
+            <input type="password" id="signup-password" name="password" required>
+
+            <label for="signup-confirm-password">Confirm Password:</label>
+            <input type="password" id="signup-confirm-password" name="confirm_password" required>
+
+            <button type="submit">Sign Up</button>
+            <p class="toggle-form">Already have an account? <a href="#" onclick="toggleForms()">Login</a></p>
+        </form>
+    </div>
+
+    <script>
+        // --- Get references to form elements --- 
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const backendUrl = 'http://localhost:5000'; // Your backend server address
+
+        // --- Function to toggle between forms ---
+        function toggleForms() {
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+            }
+        }
+
+        // --- Handle Login Form Submission ---
+        if (loginForm) { // Check if the element exists before adding listener
+            loginForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent default form submission
+
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                try {
+                    const response = await fetch(`${backendUrl}/api/auth/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email, password }),
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        // Handle errors (e.g., invalid credentials)
+                        alert(data.msg || 'Login failed!');
+                        throw new Error(data.msg || `HTTP error! status: ${response.status}`);
+                    }
+
+                    // Login successful
+                    console.log('Login successful:', data);
+                    alert('Login successful!');
+                    // Store the token (e.g., in localStorage)
+                    localStorage.setItem('token', data.token);
+                    // Redirect to a dashboard or home page
+                    window.location.href = 'index.html'; // Redirect to home page
+
+                } catch (error) {
+                    console.error('Login error:', error);
+                    // Optionally display error to user on the page
+                }
+            });
+        } else {
+            console.error('Login form element not found!');
+        }
+
+        // --- Handle Sign Up Form Submission ---
+        if (signupForm) { // Check if the element exists before adding listener
+            signupForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent default form submission
+
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+                // Basic client-side validation
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+                if (!name || !email || !password) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${backendUrl}/api/auth/register`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name, email, password }),
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        // Handle errors (e.g., user already exists)
+                        alert(data.msg || 'Registration failed!');
+                        throw new Error(data.msg || `HTTP error! status: ${response.status}`);
+                    }
+
+                    // Registration successful
+                    console.log('Registration successful:', data);
+                    alert('Registration successful! You can now log in.');
+                    // Optionally switch to login form
+                    toggleForms(); 
+                    // loginForm.reset(); // Clear login form if needed (already handled by toggle)
+                    signupForm.reset(); // Clear signup form
+
+                } catch (error) {
+                    console.error('Registration error:', error);
+                     // Optionally display error to user on the page
+                }
+            });
+        } else {
+            console.error('Signup form element not found!');
+        }
+
+    </script>
+
+</body>
+</html>
