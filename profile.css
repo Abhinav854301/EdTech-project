@@ -1,0 +1,237 @@
+/* Paste all the CSS rules here, starting from body { ... } */
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    background-color: #f8f9fa; /* Light grey background */
+    color: #333;
+}
+
+.profile-page-container {
+    display: flex;
+    max-width: 1200px; /* Adjust max-width as needed */
+    margin: 40px auto;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    overflow: hidden; /* Contain children */
+}
+
+/* --- Sidebar --- */
+.profile-sidebar {
+    width: 250px; /* Fixed width for sidebar */
+    padding: 30px 20px;
+    border-right: 1px solid #e9ecef; /* Light border */
+    background-color: #fff;
+}
+
+/* --- Main Content Area --- */
+.profile-main-content {
+    flex-grow: 1; /* Take remaining space */
+    padding: 40px;
+    position: relative; /* Needed for absolute positioning if used later */
+    overflow: hidden; /* Helps contain animations */
+}
+
+.profile-content-section {
+    display: none; /* Hide all sections by default */
+    /* Animation properties for fade-in effect */
+    opacity: 0;
+    transform: translateY(15px); /* Start slightly lower */
+    animation: fadeInSection 0.5s ease-out forwards; 
+}
+
+.profile-content-section.active-section {
+    display: block; /* Show the active section */
+    /* The animation will run when display changes to block */
+}
+
+/* Define the keyframes for the animation */
+@keyframes fadeInSection {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.upload-button:hover {
+    background-color: #f1f3f5;
+    border-color: #adb5bd;
+}
+
+.profile-content-section h2 {
+    font-size: 1.4em; /* Slightly smaller main section titles */
+    color: #343a40;
+    margin-bottom: 30px; 
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef; /* Add a subtle line under section titles */
+}
+
+/* Styles specific to the #general section forms */
+#general h2 { /* Target only h2 within #general if needed, or use a more specific class */
+     border-bottom: none; /* Remove border for sub-headings like Shipping Details */
+     font-size: 1.2em; /* Smaller size for sub-headings */
+     margin-bottom: 20px;
+     margin-top: 30px; /* Add space above sub-headings */
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px; /* Reduce space below header */
+}
+
+.section-header h2 { /* Target the h2 within the header specifically */
+    margin-bottom: 0;
+    border-bottom: none;
+    font-size: 1.4em; /* Keep this one larger */
+}
+
+.edit-profile-link {
+    color: #007bff; /* Standard link blue */
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+.edit-profile-link:hover {
+    text-decoration: underline;
+}
+
+/* Delete these rules */
+.naukri-notice {
+    font-size: 0.8em; /* Smaller notice text */
+    color: #6c757d;
+    margin-bottom: 30px;
+    background-color: #f8f9fa; /* Subtle background for notice */
+    padding: 8px 12px;
+    border-radius: 4px;
+    display: inline-block; /* Fit content */
+}
+.naukri-notice img {
+    height: 0.9em; /* Adjust logo size */
+    vertical-align: -1px;
+}
+/* End delete */
+
+/* --- Form Styles --- */
+form {
+    margin-bottom: 40px;
+}
+.form-row {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens if needed */
+    gap: 25px; /* Space between fields in a row */
+    margin-bottom: 25px; /* Increased space between rows */
+}
+.form-group {
+    flex: 1; 
+    min-width: calc(50% - 15px); /* Aim for two columns, adjust calc as needed */
+}
+.form-group.full-width {
+    flex-basis: 100%;
+    min-width: 100%;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.8em; /* Smaller label */
+    color: #495057; /* Darker grey label */
+    margin-bottom: 6px;
+    font-weight: 600; /* Slightly bolder label */
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"] {
+    width: 100%;
+    padding: 12px 15px; /* Slightly more padding */
+    border: 1px solid #ced4da;
+    border-radius: 4px; /* Slightly less rounded */
+    font-size: 0.95em;
+    box-sizing: border-box;
+    background-color: #fff; /* Ensure white background */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #80bdff; /* Highlight focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Subtle glow on focus */
+}
+
+.form-group input[readonly] {
+    background-color: #f8f9fa; /* Lighter grey for readonly */
+    cursor: default; /* Default cursor for readonly */
+    border-color: #e9ecef;
+}
+.form-group input[readonly]:focus {
+    border-color: #e9ecef; /* Prevent focus highlight on readonly */
+    box-shadow: none;
+}
+
+.contact-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    /* background-color: #f8f9fa; Remove background for editable */
+    background-color: #fff; /* Use white background now */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease; /* Add transition */
+}
+
+/* Add focus style for the container */
+.contact-input:focus-within {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.contact-input input[type="tel"] {
+    border: none;
+    flex-grow: 1;
+    padding: 12px 0 12px 8px;
+    background-color: transparent; 
+}
+.contact-input input[type="tel"]:focus {
+    outline: none;
+    box-shadow: none; 
+}
+.country-flag {
+    padding-left: 15px;
+    font-size: 1.2em; /* Make flag slightly larger */
+}
+
+.reset-password-link {
+    display: block; /* Make it block */
+    text-align: right; /* Align to the right */
+    margin-top: -10px; /* Adjust position relative to form rows */
+    margin-bottom: 20px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+.reset-password-link:hover {
+    text-decoration: underline;
+}
+
+.save-button {
+    /* Keep existing styles or adjust as needed */
+    background-color: #007bff; /* Change to blue */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; 
+}
+.save-button:hover {
+    background-color: #0056b3; /* Darker blue */
+}

@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Adjust path if needed
+const passport = require('passport'); // <-- Add passport require
 
 // --- Registration Route --- 
 // @route   POST api/auth/register
@@ -98,4 +99,52 @@ router.post('/login', async (req, res) => {
     }
 });
 
-module.exports = router;
+    // --- Google OAuth Routes --- 
+
+    // @route   GET /api/auth/google
+    // @desc    Initiate Google OAuth login flow
+    // @access  Public
+    router.get('/google', passport.authenticate('google', {
+        scope: ['profile', 'email'] // Request access to user's profile and email
+    }));
+
+    // @route   GET /api/auth/google/callback
+    // @desc    Callback route for Google to redirect to after authentication
+    // @access  Public
+    router.get('/google/callback', 
+        passport.authenticate('google', { session: false, failureRedirect: '/login.html' }), // Use session: false for JWT
+        (req, res) => {
+            // Successful authentication from Google!
+            // req.user is populated by the passport callback function in passport-setup.js
+            
+            // Create JWT payload
+            const payload = {
+                user: {
+                    id: req.user.id,
+                },
+            };
+
+            // Sign token
+            jwt.sign(
+                payload,
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' },
+                (err, token) => {
+                    if (err) throw err;
+                    // Redirect user back to the frontend, passing the token
+                    // Option 1: Redirect with token in query parameter (simple, but less secure)
+                    // res.redirect(`http://localhost:5500/index.html?token=${token}`); // Adjust frontend URL/port if needed
+                    
+                    // Option 2: Render a simple page that sets localStorage and redirects (more secure)
+                    res.send(`
+                        <script>
+                            localStorage.setItem('token', '${token}');
+                            window.location.href = '/index.html'; // Redirect to your main frontend page
+                        </script>
+                    `);
+                }
+            );
+        }
+    );
+
+    module.exports = router;

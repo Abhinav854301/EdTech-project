@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - GUIDE IN</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your existing stylesheet -->
+    <link rel="stylesheet" href="profile.css"> <!-- Add this line -->
+    <style>
+        /* Basic styles for profile page layout */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+        .profile-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Animation Styles --- */
+        .profile-section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            opacity: 0; /* Start hidden */
+            transform: translateY(30px); /* Start slightly lower */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .profile-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .profile-section.appear {
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Slide up to original position */
+        }
+        /* --- End Animation Styles --- */
+
+        .profile-section h2 {
+            color: #DF2771; /* Theme color */
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        .profile-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .profile-item {
+            margin-bottom: 10px;
+        }
+        .profile-item label {
+            font-weight: bold;
+            display: inline-block;
+            width: 150px; /* Adjust as needed */
+            color: #555;
+        }
+        .profile-item span, .profile-item input, .profile-item textarea {
+            color: #333;
+            /* Add styles for inputs later */
+        }
+        /* Simple list for other settings */
+        .settings-list {
+            list-style: none;
+            padding: 0;
+        }
+        .settings-list li {
+            margin-bottom: 8px;
+        }
+        .settings-list li a {
+            text-decoration: none;
+            color: #3498db; /* Link color */
+        }
+        .settings-list li a:hover {
+            text-decoration: underline;
+        }
+        /* Back link */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .profile-item input[type="text"],
+        .profile-item input[type="email"],
+        .profile-item input[type="tel"],
+        .profile-item select,
+        .profile-item textarea {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: calc(100% - 170px); /* Adjust width based on label */
+            box-sizing: border-box; /* Include padding and border in element's total width */
+            margin-left: 10px; /* Space between label and input */
+        }
+        
+        .profile-item input[readonly] {
+            background-color: #eee;
+            cursor: not-allowed;
+        }
+
+        .profile-link {
+             color: #3498db;
+             text-decoration: none;
+        }
+        .profile-link:hover {
+            text-decoration: underline;
+        }
+
+        .save-button {
+            background-color: #DF2771; /* Theme color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            float: none; /* Override default button float */
+            display: block; /* Make it block to center easily if needed */
+            margin-top: 20px;
+        }
+
+        .save-button:hover {
+            background-color: #c81e5f; /* Darker shade */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="profile-page-container">
+        <!-- Sidebar Navigation -->
+        <aside class="profile-sidebar">
+            <h3>Your Account</h3>
+            <nav>
+                <ul>
+                    <li><a href="#general" class="active-profile-tab">General</a></li>
+                    <li><a href="#resume">Resume</a></li>
+                    <li><a href="#notifications">Notification preferences</a></li>
+                    <li><a href="#orders">My orders</a></li>
+                    <li><a href="#wallet">My wallet</a></li>
+                    <li><a href="#sessions">Recent sessions</a></li>
+                </ul>
+            </nav>
+            <a href="index.html" class="back-link-sidebar">&larr; Back to Home</a>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="profile-main-content">
+            <!-- General Section (Visible by default) -->
+            <section id="general" class="profile-content-section active-section">
+                <div class="section-header">
+                    <h2>Personal Details</h2>
+                    <a href="#" class="edit-profile-link">Edit profile &rarr;</a> 
+                </div>
+                {{ edit }}
+                
+                <form id="general-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-name">Name</label>
+                            <input type="text" id="profile-name" name="name" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-email">Email</label>
+                            <input type="email" id="profile-email" name="email" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-contact">Contact</label>
+                            <div class="contact-input editable">
+                                <span class="country-flag">🇮🇳</span> <!-- Placeholder -->
+                                <input type="tel" id="profile-contact" name="contact" pattern="[0-9]{10}" title="Please enter 10 digit mobile number" placeholder="Enter 10 digit number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-timezone">Time-Zone</label>
+                            <input type="text" id="profile-timezone" name="timezone" value="Asia/Calcutta" readonly>
+                        </div>
+                    </div>
+                    <a href="#" class="reset-password-link">Reset Password</a>
+                    <!-- Save button for general details if needed -->
+                    <!-- <button type="submit" class="save-button">Save Personal Details</button> -->
+                </form>
+
+                <!-- Shipping Details Integrated -->
+                <h2 class="sub-heading">Shipping Details</h2> 
+                <form id="shipping-form">
+                     <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-country">Country</label>
+                            <input type="text" id="profile-country" name="country" value="India" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-pincode">Pincode *</label>
+                            <input type="text" id="profile-pincode" name="pincode" required>
+                        </div>
+                    </div>
+                     <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-city">City</label>
+                            <input type="text" id="profile-city" name="city">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-state">State</label>
+                            <input type="text" id="profile-state" name="state">
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="profile-address1">Address Line 1 *</label>
+                        <input type="text" id="profile-address1" name="address1" required>
+                    </div>
+                    <!-- Add Address Line 2 if needed -->
+                    <button type="submit" class="save-button">Save Shipping Details</button> 
+                </form>
+            </section>
+
+            <!-- Resume Section (Hidden by default) -->
+            <section id="resume" class="profile-content-section">
+                <h2>Resume</h2>
+                <div class="resume-upload-area">
+                    <img src="images/extra/resume-placeholder.svg" alt="" class="resume-placeholder-img"> <!-- Create or find a suitable placeholder image -->
+                    <p>No resume uploaded yet</p>
+                    <p class="upload-instruction">Please upload your resume in PDF format</p>
+                    <button class="upload-button">
+                        <img src="images/icon/upload.png" alt="" style="height: 1em; margin-right: 5px;"> Upload resume
+                    </button>
+                </div>
+            </section>
+
+            <!-- Notification Preferences Section (Hidden by default) -->
+            <section id="notifications" class="profile-content-section">
+                <h2>Notification preferences</h2>
+                <!-- Content for notifications goes here -->
+                <p>Notification settings will be here...</p>
+            </section>
+
+            <!-- My Orders Section (Hidden by default) -->
+            <section id="orders" class="profile-content-section">
+                <h2>My orders</h2>
+                <!-- Content for orders goes here -->
+                <p>Order history will be here...</p>
+            </section>
+
+            <!-- My Wallet Section (Hidden by default) -->
+            <section id="wallet" class="profile-content-section">
+                <h2>My wallet</h2>
+                <!-- Content for wallet goes here -->
+                <p>Wallet details will be here...</p>
+            </section>
+
+            <!-- Recent Sessions Section (Hidden by default) -->
+            <section id="sessions" class="profile-content-section">
+                <h2>Recent sessions</h2>
+                <!-- Content for sessions goes here -->
+                <p>Recent login sessions will be here...</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // JavaScript for tab switching will go here
+    </script>
+</body>
+</html>
+
+       

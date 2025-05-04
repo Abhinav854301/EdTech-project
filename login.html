@@ -223,6 +223,15 @@
             console.error('Signup form element not found!');
         }
 
+        // Add this for Google Sign-In button
+        const googleSignInButton = document.getElementById('google-signin-button');
+        if (googleSignInButton) {
+            googleSignInButton.addEventListener('click', () => {
+                // Redirect to the backend endpoint that starts the Google OAuth flow
+                window.location.href = 'http://localhost:5000/api/auth/google'; 
+            });
+        }
+
     </script>
 
 </body>
