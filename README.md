@@ -1,4 +1,4 @@
-# EdTech Project (Replace with your actual project name)
+# EdTech Project - GUIDE INN
 
 A full-stack web application for an educational platform, featuring user authentication, course browsing, and potentially more features.
 
